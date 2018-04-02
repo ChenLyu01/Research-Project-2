@@ -216,7 +216,7 @@ This link [Research Project One](http://www.06-90.com/projects/p1/index.html) is
 	
 ```
 
-This link [Research Project Two Demo](http://www.06-90.com/projects/p2/index.html). In this engine, the response of events is very **simple**. Only this **setInteractive**, You can think this way, it turns a static picture into an activated button. In other words, it can be operated by keyboard and mouse. **input.enabled** is the switch of one of its events.
+This link [Research Project Two Demo](http://www.06-90.com/projects/p2/index.html). In this game engine, I have to say that the events are very **simple**. Only the **setInteractive**, You can think this way, it turns a static picture into an activated button. In other words, the image can be operated by keyboard or mouse. Besides that the key **input.enabled** could be considered to be the switch of one of its Interactive events.
 
 
 
