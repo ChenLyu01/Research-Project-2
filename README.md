@@ -221,8 +221,11 @@ This link [Research Project Two Demo](http://www.06-90.com/projects/p2/index.htm
 
 
 
+
+
 ### Source code description
 
+```
 var GameScene = new Phaser.Class({
 	
 var UIScene = new Phaser.Class({
@@ -243,8 +246,14 @@ var config = {
 
 var game = new Phaser.Game(config);	
 ********************************************************	
+```
+
+
+
 
 Another important thing is that the statement of Config must be placed at the bottom of the whole function. This is a rule. Please pay attention to it. When I first debug it, I didn't notice this problem, so the program does not work.   ：（
+
+
 
 
 ### Reference
