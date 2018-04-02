@@ -231,10 +231,12 @@ var GameScene = new Phaser.Class({
 var UIScene = new Phaser.Class({
 	
 	//We can see that there are two Phaser classes. They all belong to **Phaser.Scene**.
-	
+```	
 Here:
 
 ********************************************************
+
+```
 var config = {
 	type: Phaser.AUTO,
 	width: 800,
@@ -245,8 +247,9 @@ var config = {
 };
 
 var game = new Phaser.Game(config);	
-********************************************************	
 ```
+********************************************************	
+
 
 
 
