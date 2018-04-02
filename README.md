@@ -10,11 +10,11 @@ This is also a technical study for [Navigable Video](http://www.06-90.com/final/
 
 ### Required technology
 
-In this picture below.
+In the picture below.
 
 ![Image text](https://github.com/ChenLyu01/Research-Project-2/blob/master/image/image1.png) 
 
-The audience can clicked the **Honeycomb** button.
+The audience can click the **Honeycomb** button.
 
 
 
