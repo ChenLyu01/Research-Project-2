@@ -12,81 +12,233 @@ This is also a technical study for [Navigable Video](http://www.06-90.com/final/
 
 In this picture below.
 
-![Image text](https://github.com/ChenLyu01/Research-Project-1/blob/master/image/image1.png) 
+![Image text](https://github.com/ChenLyu01/Research-Project-2/blob/master/image/image1.png) 
 
-I need to put it on the top of a video, so that it can be clicked by the audience.
+The audience can clicked the **Honeycomb** button.
 
 
 
 - Code without the game engine
 
 ```
- for(var i=0;i<3;i++){//img.length
-	for(var a=0; a<4; a++){
-		ctx.drawImage(img1,162*(a)+20 ,93*(i)+30);
+initEvent(){
+	// 
+	this.mousedownHandler2 = this.mousedownHandler.bind(this);
+	this.mousemoveHandler2 = this.mousemoveHandler.bind(this);
+	this.mouseupHandler2 = this.mouseupHandler.bind(this);
+	
+	this.canvas.addEventListener("mousedown", this.mousedownHandler2);
+	this.canvas.addEventListener("mousemove", this.mousemoveHandler2);
+	this.canvas.addEventListener("mouseup", this.mouseupHandler2);
+	
+	this.choiceDiv.addEventListener("click", this.choiceHandler.bind(this));
+}
+	
+resetBlock(){
+	this.toScaleIndex = -1;
+	this.toMoveIndex = -1;
+	this.todo = '';
+}
+	
+mousedownHandler(e){
+	this.isMouseDown = true;
+	this.origin = [e.offsetX, e.offsetY];
+	
+	this.resetBlock();
+		for(let i = 0; i < this.rects.length; i++){
+			if(this.isPointInRect(this.origin, this.rects[i].coord)){
+				this.todo = 'BBclick';
+				this.toMoveIndex = i;
+				this.rects[i].selected=1
+				//ClickRectHandler(i, this.rects[i].coord);
+			}
+		}
+
+	
+}
+	
+mousemoveHandler(e){
+	this.modifyCursorStyle([e.offsetX, e.offsetY]);
+	
+	if(!this.isMouseDown){
+		return;
+	}
+	
+	let end = [e.offsetX, e.offsetY];
+	this.wh = [end[0] - this.origin[0], end[1] - this.origin[1]];
+	
+	let rectCoord = [...this.origin, ...this.wh];
+	
+	for(let i = 0; i < this.rects.length; i++){
+		if(this.isPointInRect(this.end, this.rects[i].coord)){
+			this.todo = 'move';
+			this.toMoveIndex = i;
+			this.rects[i].selected=1
+		}
+	}       
+	
+	switch (this.todo){
+		case "move":
+			this.MoveRectHandler(this.toMoveIndex, rectCoord);
+			break;
+		case "BBclick":
+			this.ClickRectHandler(this.toMoveIndex, rectCoord);
+			break;              
+	}
+	this.choiceDiv.style.display = 'none';
+}
+	
+
+mouseupHandler(e){
+	this.isMouseDown = false;
+	
+	let end = [e.offsetX, e.offsetY];
+	this.wh = [end[0] - this.origin[0], end[1] - this.origin[1]];
+	let rectCoord = [...this.origin, ...this.wh];
+
+	switch (this.todo){
+		case "move":
+			this.MoveRectHandler(this.toMoveIndex);
+			this.activeIndex = this.toMoveIndex;
+			break;
+		case "BBclick":
+			this.ClickRectHandler(this.toMoveIndex, rectCoord);
+			break;   
+	}
+	
+	this.resetBlock();
+
+}
+	
+	
+ClickRectHandler(rectIndex, rectCoord){
+	console.log("BBclick");
+	let selectedRectCoord = this.rects[rectIndex].coord;
+	let newRectCoord = [selectedRectCoord[0] + rectCoord[2], selectedRectCoord[1] + rectCoord[3], selectedRectCoord[2], selectedRectCoord[3]];
+	this.clearCanvas();
+	this.FormatRect(rectIndex);
+
+}
+	
+MoveRectHandler(rectIndex, rectCoord){
+	console.log("Move");
+	let selectedRectCoord = this.rects[rectIndex].coord;
+	let newRectCoord = [selectedRectCoord[0] + rectCoord[2], selectedRectCoord[1] + rectCoord[3], selectedRectCoord[2], selectedRectCoord[3]];
+	
+	this.FormatRect(rectIndex);
+}   
+	
+FormatRect(index){
+	this.ctx = this.canvas.getContext('2d') || null;
+	let ctx = this.ctx;
+
+	let img = document.getElementsByName("honeycomb");
+	let imgArray = document.getElementById("honeycombarray");
+
+	
+	for(let i = 0; i < this.rects.length; i++){
+		ctx.drawImage(img[0], this.rects[i].coord[0],this.rects[i].coord[1]);
+		//var ntID = this.rects[i].rnd;
+		//ctx.drawImage(imgArray,window.navaigation[ntID].coord[0],window.navaigation[ntID].coord[1],108,93, this.rects[i].coord[0],this.rects[i].coord[1],108,93);
+		if(i !== index){
+			let coord = this.rects[i].coord;
+			if (this.rects[i].selected !== 1){
+				var ntID = this.rects[i].rnd;
+				ctx.drawImage(img[1], this.rects[i].coord[0],this.rects[i].coord[1]);
+				//ctx.drawImage(imgArray,window.navaigation[ntID].coord[0],window.navaigation[ntID].coord[1],108,93, this.rects[i].coord[0],this.rects[i].coord[1],108,93);
+			}
+			//this.fillText(this.rects[i]);
+		}else {
+			var ntID = this.rects[i].rnd;
+			var ntPlayID = window.navaigation[ntID].ntvideodataID;
+			ctx.drawImage(imgArray,window.navaigation[ntID].coord[0],window.navaigation[ntID].coord[1],108,93, this.rects[i].coord[0],this.rects[i].coord[1],108,93);
+			this.fillText(this.rects[i]);
+			this.fillClips(ntPlayID);
+		}
 	}
 }
-for(var i=0;i<2;i++){    
-	for(var a=0; a<3; a++){
-		ctx.drawImage(img2,162*(a)+20+81 ,93*(i)+30+46);
-	}   
-}
-```
 
+```
+This link [Research Project One](http://www.06-90.com/projects/p1/index.html) is the work without the Phaser. I have to say that this is a very complicated programming process. First, we're going to write the mouse down event. Besides, we also need to write mouse up event. The most important thing is not just that. This **initEvent()** is similar to a detector or a handler, You might notice this **.addEventListener**，It's always watching the **Canvas'** status. This requires a lot of code to manage these events. So let's see how the Phaser engine works.
 
 
 
 - Code after using the Phaser
 
-![Image text](https://github.com/ChenLyu01/Research-Project-1/blob/master/image/image2.png)
-
-This is a picture generated by this game engine. The graphics look the same, but the code is **completely** different.
-
 ```
-var line1 = new Phaser.Geom.Line(100, 200, 100 + 4 * 162, 200);
-var group1 = this.add.group({ key: 'honeycomb1', frameQuantity: 4 });
-Phaser.Actions.PlaceOnLine(group1.getChildren(), line1);
-	
-var line2 = new Phaser.Geom.Line(100 + 81, 200+46, 100 + 81 +3* 162, 200+46);
-var group2 = this.add.group({ key: 'honeycomb2', frameQuantity: 3 });
-Phaser.Actions.PlaceOnLine(group2.getChildren(), line2);			
+	create: function ()
+	{
+		var hcID = 0
+		var honeycomb = [];
+		this.add.image(400, 300, 'bg');
 
-var line3 = new Phaser.Geom.Line(100, 200+1 * 93, 100 + 4 * 162, 200+1 * 93);
-var group3 = this.add.group({ key: 'honeycomb1', frameQuantity: 4 });
-Phaser.Actions.PlaceOnLine(group3.getChildren(), line3);
+		for(var i=0;i<3;i++){
+			for(var j=0; j<4; j++){			
+				var x = 162*(j)+160;
+				var y = 93*(i)+220;
+				var box = this.add.image(x, y, 'honeycombBlue');
+				box.setInteractive();
+			}
+		}
+
+		for(var i=0;i<2;i++){
+			for(var j=0; j<3; j++){			
+				var x = 162*(j)+160+81;
+				var y = 93*(i)+220+46;
+				var box = this.add.image(x, y, 'honeycombRed');
+				box.setInteractive();
+			}
+		}
+		
+		this.input.on('gameobjectup', this.clickHandler, this);
+	},
+
+	clickHandler: function (pointer, box)
+	{
+		if (box.input.enabled = true){
+			box.input.enabled = false;
+			box.setVisible(false);
+			var box = this.add.image(box.x, box.y, 'honeycomb1');
+		}
+		this.events.emit('addScore');
+	}
 	
-var line4 = new Phaser.Geom.Line(100 + 81 , 200+ 46+1 * 93, 100 + 81 +3* 162 , 200+ 46+1 * 93);
-var group4 = this.add.group({ key: 'honeycomb2', frameQuantity: 3 });
-Phaser.Actions.PlaceOnLine(group4.getChildren(), line4);	
-	
-var line5 = new Phaser.Geom.Line(100, 200+2 * 93, 100 + 4 * 162, 200+2 * 93);
-var group5 = this.add.group({ key: 'honeycomb1', frameQuantity: 4 });
-Phaser.Actions.PlaceOnLine(group5.getChildren(), line5);			
+});
+		
 	
 ```
 
-You may click on this link [Research Project One](http://www.06-90.com/projects/p1/index.html). 
-I hope I could have a chance to recode this function. It's a bit complicated to code like this.
+This link [Research Project Two Demo](http://www.06-90.com/projects/p2/index.html). In this engine, the response of events is very **simple**. Only this **setInteractive**, You can think this way, it turns a static picture into an activated button. In other words, it can be operated by keyboard and mouse. **input.enabled** is the switch of one of its events.
+
 
 
 
 ### Source code description
 
-var line1 = new Phaser.Geom.Line(100, 200, 100 + 4 * 162, 200);
+var GameScene = new Phaser.Class({
+	
+var UIScene = new Phaser.Class({
+	
+	//We can see that there are two Phaser classes. They all belong to **Phaser.Scene**.
+	
+Here:
 
-// **line1** is a function for declaring a straight line (X1, Y2, X2, Y2) **X and Y** are the coordinates of the starting point and the end point.
+********************************************************
+var config = {
+	type: Phaser.AUTO,
+	width: 800,
+	height: 600,
+	backgroundColor: '#000000',
+	parent: 'Navigable Video',
+	**scene: [ GameScene, UIScene ]** //  Here, we can find some evidence, They are all in the scene
+};
 
-var group1 = this.add.group({ key: 'honeycomb1', frameQuantity: 4 });
+var game = new Phaser.Game(config);	
+********************************************************	
 
-// **key** is the name of the image and **frameQuantity** means how many pictures it need to draw.
-
-Phaser.Actions.PlaceOnLine(group1.getChildren(), line1);
-
-// **Phaser.Actions.PlaceOnLine** It's an event that the engine draws the line.
-
-
+Another important thing is that the statement of Config must be placed at the bottom of the whole function. This is a rule. Please pay attention to it. When I first debug it, I didn't notice this problem, so the program does not work.   ：（
 
 
 ### Reference
-[The official example](https://labs.phaser.io/edit.html?src=src\actions\place%20on%20line.js) 
+[The official example](https://labs.phaser.io/edit.html?src=src\scenes\ui%20scene.js) 
 
