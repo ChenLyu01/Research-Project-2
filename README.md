@@ -18,6 +18,8 @@ The audience can click the **Honeycomb** button.
 
 
 
+
+
 - Code without the game engine
 
 ```
@@ -160,6 +162,12 @@ FormatRect(index){
 
 ```
 This link [Research Project One](http://www.06-90.com/projects/p1/index.html) is the work without the Phaser. I have to say that this is a very complicated programming process. First, we're going to write the mouse down event. Besides, we also need to write mouse up event. The most important thing is not just that. This **initEvent()** is similar to a detector or a handler, You might notice this **.addEventListener**，It's always watching the **Canvas'** status. This requires a lot of code to manage these events. So let's see how the Phaser engine works.
+
+
+
+
+
+
 
 
 
